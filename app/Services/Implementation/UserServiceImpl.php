@@ -1,36 +1,40 @@
 <?php
 
 namespace App\Services\Implementation;
+use App\Http\Resources\UserCollection;
+use App\Http\Resources\UserResource;
 use App\Repository\UserRepository;
 use App\Services\UserService;
+use Illuminate\Support\Facades\Response;
 
 class UserServiceImpl implements UserService
 {
-    protected $userRepository;
+
+    private UserRepository $userRepository;
 
     public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
     }
 
-    public function storeUserService($data)
+    public function storeUserService($data): UserResource
     {
-        return "something";
+        return $this->userRepository->storeUser($data);
     }
 
-    public function getUsersService()
+    public function getUsersService(): UserCollection
     {
-        return "something";
+        return $this->userRepository->getUsers();
     }
 
     public function findOneService($user)
     {
-        return "something";
+        return $this->userRepository->findOne($user);
     }
 
     public function updateUserService($user, $data)
     {
-        return "something";
+        return $this->userRepository->updateUser($user, $data);
     }
 
     public function deleteUserService($user)
