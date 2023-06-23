@@ -5,6 +5,7 @@ use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Repository\UserRepository;
+
 use Illuminate\Support\Facades\Hash;
 
 class UserRepositoryImpl implements UserRepository
@@ -16,7 +17,7 @@ class UserRepositoryImpl implements UserRepository
         $this->user = $user;
     }
 
-    public function storeUser(array $data): UserResource
+    public function storeUser(array $data)
     {
         $this->user->name = $data['name'];
         $this->user->email = $data['email'];

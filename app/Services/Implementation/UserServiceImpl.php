@@ -17,7 +17,7 @@ class UserServiceImpl implements UserService
         $this->userRepository = $userRepository;
     }
 
-    public function storeUserService($data): UserResource
+    public function storeUserService($data)
     {
         return $this->userRepository->storeUser($data);
     }

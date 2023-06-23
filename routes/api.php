@@ -21,13 +21,16 @@ use Illuminate\Support\Facades\Route;
 
 
 // Protected routes
-Route::resource('users', UserController::class, ['middleware' => 'auth:sanctum'])->only([
-    'index', 'update', 'show', 'destroy'
-]);
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::resource('users', UserController::class, ['middleware' => 'auth:sanctum'])->only([
+        'index', 'update', 'show', 'destroy'
+    ]);
+    Route::post('/users/logout', [UserController::class, 'signup']);
+});
 
 // Public routes
-Route::resource('users', UserController::class)->only([
-    'store', 'login'
-]);
+Route::post('/users', [UserController::class, 'store']);
+Route::post('/users/login', [UserController::class, 'login']);
+
 
 
