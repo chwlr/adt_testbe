@@ -25,7 +25,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::resource('users', UserController::class, ['middleware' => 'auth:sanctum'])->only([
         'index', 'update', 'show', 'destroy'
     ]);
-    Route::post('/users/logout', [UserController::class, 'signup']);
+    Route::post('/users/logout', [UserController::class, 'logout']);
 });
 
 // Public routes

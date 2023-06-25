@@ -4,13 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginUserRequest;
 use App\Http\Resources\UserResource;
-use App\Models\User;
 use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserRequest;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
 
 class UserController extends Controller
 {
@@ -29,46 +26,12 @@ class UserController extends Controller
     }
 
     /**
-     * Authenticate User login.
-     */
-    public function login(LoginUserRequest $request)
-    {
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password]))
-        {
-            $authUser = Auth::user();
-            $token = $authUser->createToken('authToken')->plainTextToken;
-            return (new UserResource($authUser))->additional(['token' => $token]);
-        } else {
-            $error = [
-                'status' => 400,
-                'error' => 'Invalid email and password'
-            ];
-            return response()->json($error, $error['status']);
-        }
-    }
-
-    /**
-     * Authenticate User logout.
-     */
-    public function signup(Request $request)
-    {
-        try {
-            $request->user()->currentAccessToken()->delete();
-            return response()->json("goodbye");
-        }catch (\Exception $e)
-        {
-            return response()->json($e);
-        }
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreUserRequest $request)
     {
         $data = $request->safe()->only(['name', 'email', 'password']);
-        $result = $this->userService->storeUserService($data);
-        return $result->response()->setStatusCode(201);
+        return $this->userService->storeUserService($data);
     }
 
     /**
@@ -91,8 +54,25 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy($user)
     {
-        //
+        return $this->userService->deleteUserService($user);
+    }
+
+    /**
+     * Authenticate User login.
+     */
+    public function login(LoginUserRequest $request)
+    {
+        $data = $request->safe()->only(['name', 'email', 'password']);
+        return $this->userService->loginUserService($data);
+    }
+
+    /**
+     * Authenticate User logout.
+     */
+    public function logout()
+    {
+        return $this->userService->logoutUserService();
     }
 }

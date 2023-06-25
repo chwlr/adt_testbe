@@ -39,6 +39,16 @@ class UserServiceImpl implements UserService
 
     public function deleteUserService($user)
     {
-        return "something";
+        return $this->userRepository->deleteUser($user);
+    }
+
+    public function loginUserService($data)
+    {
+        return $this->userRepository->loginUser($data);
+    }
+
+    public function logoutUserService()
+    {
+        return $this->userRepository->logoutUser();
     }
 }

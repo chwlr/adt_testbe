@@ -11,4 +11,6 @@ interface UserRepository
     public function findOne($user);
     public function updateUser($user, $data);
     public function deleteUser($user);
+    public function loginUser($user);
+    public function logoutUser();
 }

@@ -9,4 +9,6 @@ interface UserService
     public function findOneService($user);
     public function updateUserService($user, $data);
     public function deleteUserService($user);
+    public function loginUserService($data);
+    public function logoutUserService();
 }
