@@ -4,11 +4,11 @@ namespace App\Services;
 
 interface UserService
 {
-    public function storeUserService($data);
+    public function storeUserService($attribute);
     public function getUsersService();
     public function findOneService($user);
-    public function updateUserService($user, $data);
+    public function updateUserService($user, $attribute);
     public function deleteUserService($user);
-    public function loginUserService($data);
+    public function loginUserService($attribute);
     public function logoutUserService();
 }

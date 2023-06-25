@@ -25,14 +25,14 @@ class UserRepositoryImpl implements UserRepository
     /**
      * @throws GeneralJsonException
      */
-    public function storeUser(array $data): UserResource
+    public function storeUser(array $attribute): UserResource
     {
         try {
             DB::beginTransaction();
             $stored = $this->user->query()->create([
-                'name' => data_get($data, 'name'),
-                'email' => data_get($data, 'email'),
-                'password' => Hash::make(data_get($data, 'password'))
+                'name' => data_get($attribute, 'name'),
+                'email' => data_get($attribute, 'email'),
+                'password' => Hash::make(data_get($attribute, 'password'))
             ]);
             DB::commit();
             $token = $stored->createToken('authToken')->plainTextToken;
@@ -61,14 +61,14 @@ class UserRepositoryImpl implements UserRepository
         }
     }
 
-    public function updateUser($user, $data): UserResource
+    public function updateUser($user, $attribute): UserResource
     {
         try {
             DB::beginTransaction();
             $user = $this->user->query()->update([
-                'name' => data_get($data, 'name'),
-                'email' => data_get($data, 'email'),
-                'password' => Hash::make(data_get($data, 'password'))
+                'name' => data_get($attribute, 'name'),
+                'email' => data_get($attribute, 'email'),
+                'password' => Hash::make(data_get($attribute, 'password'))
             ]);
             DB::commit();
             return new UserResource($user);
@@ -92,9 +92,9 @@ class UserRepositoryImpl implements UserRepository
         }
     }
 
-    public function loginUser($user): UserResource
+    public function loginUser($attribute): UserResource
     {
-        if (Auth::attempt(['email' => data_get($user, 'email'), 'password' => data_get($user, 'password')]))
+        if (Auth::attempt(['email' => data_get($attribute, 'email'), 'password' => data_get($attribute, 'password')]))
         {
             $authUser = Auth::user();
             $token = $authUser->createToken('authToken')->plainTextToken;

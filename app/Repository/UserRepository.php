@@ -2,15 +2,13 @@
 
 namespace App\Repository;
 
-use App\Http\Resources\UserResource;
-
 interface UserRepository
 {
-    public function storeUser(array $data);
+    public function storeUser(array $attribute);
     public function getUsers();
     public function findOne($user);
-    public function updateUser($user, $data);
+    public function updateUser($user, $attribute);
     public function deleteUser($user);
-    public function loginUser($user);
+    public function loginUser($attribute);
     public function logoutUser();
 }

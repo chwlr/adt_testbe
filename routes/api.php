@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,10 +23,10 @@ use Illuminate\Support\Facades\Route;
 
 // Protected routes
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::resource('users', UserController::class, ['middleware' => 'auth:sanctum'])->only([
-        'index', 'update', 'show', 'destroy'
-    ]);
+    Route::apiResource('users', UserController::class);
     Route::post('/users/logout', [UserController::class, 'logout']);
+
+    Route::apiResource('category', CategoryController::class);
 });
 
 // Public routes

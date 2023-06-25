@@ -2,10 +2,8 @@
 
 namespace App\Services\Implementation;
 use App\Http\Resources\UserCollection;
-use App\Http\Resources\UserResource;
 use App\Repository\UserRepository;
 use App\Services\UserService;
-use Illuminate\Support\Facades\Response;
 
 class UserServiceImpl implements UserService
 {
