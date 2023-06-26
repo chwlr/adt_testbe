@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Password;
 
-class UpdateUserRequest extends FormRequest
+class StoreCategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,9 +22,16 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-//            'name' => 'required',
-//            'email' => 'required|email|unique:user,email',
-//            'password' => ['required', Password::min(8)->mixedCase()],
+            'name' => 'required',
+            'size' => 'required'
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Name is required',
+            'size.required' => 'Size is required'
         ];
     }
 }

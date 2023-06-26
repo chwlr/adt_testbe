@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Services\UserService;
-use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -28,8 +28,8 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        $data = $request->safe()->only(['name', 'email', 'password']);
-        return $this->userService->storeUserService($data);
+        $attribute = $request->safe()->only(['name', 'email', 'password']);
+        return $this->userService->storeUserService($attribute);
     }
 
     /**
@@ -44,7 +44,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $user)
+    public function update(UpdateUserRequest $request, $user)
     {
         return $this->userService->updateUserService($user, $request);
     }
@@ -62,7 +62,7 @@ class UserController extends Controller
      */
     public function login(LoginUserRequest $request)
     {
-        $data = $request->safe()->only(['name', 'email', 'password']);
+        $data = $request->safe()->only(['email', 'password']);
         return $this->userService->loginUserService($data);
     }
 

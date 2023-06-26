@@ -14,6 +14,11 @@ class CategoryServiceImpl implements CategoryService
         $this->categoryRepository = $categoryRepository;
     }
 
+    public function getCategoryService($category)
+    {
+        return $this->categoryRepository->getCategory($category);
+    }
+
     public function getAllCategoryService()
     {
         return $this->categoryRepository->getAllCategory();
@@ -21,16 +26,16 @@ class CategoryServiceImpl implements CategoryService
 
     public function storeCategoryService($attribute)
     {
-        // TODO: Implement storeCategoryService() method.
+        return $this->categoryRepository->storeCategory($attribute);
     }
 
     public function updateCategoryService($attribute)
     {
-        // TODO: Implement updateCategoryService() method.
+        return $this->categoryRepository->updateCategory($attribute);
     }
 
     public function deleteCategoryService($category)
     {
-        // TODO: Implement deleteCategoryService() method.
+        return $this->categoryRepository->deleteCategory($category);
     }
 }

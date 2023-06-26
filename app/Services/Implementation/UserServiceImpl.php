@@ -15,9 +15,9 @@ class UserServiceImpl implements UserService
         $this->userRepository = $userRepository;
     }
 
-    public function storeUserService($data)
+    public function storeUserService($attribute)
     {
-        return $this->userRepository->storeUser($data);
+        return $this->userRepository->storeUser($attribute);
     }
 
     public function getUsersService(): UserCollection
@@ -30,9 +30,9 @@ class UserServiceImpl implements UserService
         return $this->userRepository->findOne($user);
     }
 
-    public function updateUserService($user, $data)
+    public function updateUserService($attribute)
     {
-        return $this->userRepository->updateUser($user, $data);
+        return $this->userRepository->updateUser($attribute);
     }
 
     public function deleteUserService($user)
@@ -40,9 +40,9 @@ class UserServiceImpl implements UserService
         return $this->userRepository->deleteUser($user);
     }
 
-    public function loginUserService($data)
+    public function loginUserService($attribute)
     {
-        return $this->userRepository->loginUser($data);
+        return $this->userRepository->loginUser($attribute);
     }
 
     public function logoutUserService()

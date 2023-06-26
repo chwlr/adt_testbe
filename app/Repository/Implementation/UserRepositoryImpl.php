@@ -61,7 +61,7 @@ class UserRepositoryImpl implements UserRepository
         }
     }
 
-    public function updateUser($user, $attribute): UserResource
+    public function updateUser($attribute): UserResource
     {
         try {
             DB::beginTransaction();
