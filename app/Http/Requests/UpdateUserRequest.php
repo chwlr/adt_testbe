@@ -23,9 +23,7 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-//            'name' => 'required',
-//            'email' => 'required|email|unique:user,email',
-//            'password' => ['required', Password::min(8)->mixedCase()],
+            'email' => 'email|unique:user,email',
         ];
     }
 }

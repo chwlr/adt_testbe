@@ -29,9 +29,9 @@ class CategoryServiceImpl implements CategoryService
         return $this->categoryRepository->storeCategory($attribute);
     }
 
-    public function updateCategoryService($attribute)
+    public function updateCategoryService($attribute, $category)
     {
-        return $this->categoryRepository->updateCategory($attribute);
+        return $this->categoryRepository->updateCategory($attribute, $category);
     }
 
     public function deleteCategoryService($category)

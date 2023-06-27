@@ -30,9 +30,9 @@ class UserServiceImpl implements UserService
         return $this->userRepository->findOne($user);
     }
 
-    public function updateUserService($attribute)
+    public function updateUserService($attribute, $user)
     {
-        return $this->userRepository->updateUser($attribute);
+        return $this->userRepository->updateUser($attribute, $user);
     }
 
     public function deleteUserService($user)

@@ -34,12 +34,12 @@ class UserRepositoryImpl implements UserRepository
                 'email' => data_get($attribute, 'email'),
                 'password' => Hash::make(data_get($attribute, 'password'))
             ]);
-            DB::commit();
             $token = $stored->createToken('authToken')->plainTextToken;
+            DB::commit();
             return (new UserResource($stored->fresh()))->additional(['token' => $token]);
         } catch (Exception $e){
             DB::rollBack();
-            throw new GeneralJsonException('Failed to store data', 400);
+            throw new GeneralJsonException($e->getMessage(), 400);
         }
     }
 
@@ -55,20 +55,25 @@ class UserRepositoryImpl implements UserRepository
     public function findOne($user): UserResource
     {
         try {
-            return new UserResource($this->user->find($user));
+            return new UserResource($this->user->findOrFail($user));
         } catch (Exception $e) {
             throw new GeneralJsonException('Failed to retrieve data', 400);
         }
     }
 
-    public function updateUser($attribute): UserResource
+    public function updateUser($attribute, $user): UserResource
     {
+        $user = $this->user->find($user);
+        if (empty($user)) {
+            throw new GeneralJsonException('Failed to update, data not found', 404);
+        }
+
         try {
             DB::beginTransaction();
-            $user = $this->user->query()->update([
-                'name' => data_get($attribute, 'name'),
-                'email' => data_get($attribute, 'email'),
-                'password' => Hash::make(data_get($attribute, 'password'))
+            $user->update([
+                'name' => data_get($attribute, 'name') == null ? $user->getOriginal('name') : data_get($attribute, 'name'),
+                'email' => data_get($attribute, 'email') == null ? $user->getOriginal('email') : data_get($attribute, 'email'),
+                'password' => $user->getOriginal('password')
             ]);
             DB::commit();
             return new UserResource($user);
@@ -80,9 +85,13 @@ class UserRepositoryImpl implements UserRepository
 
     public function deleteUser($user)
     {
+        $user = $this->user->find($user);
+        if (empty($user)) {
+            throw new GeneralJsonException('Failed to delete, data not found', 404);
+        }
+
         try {
             DB::beginTransaction();
-            $user = $this->user->findOrFail($user);
             $user->delete();
             DB::commit();
             return response()->json("Data deleted");

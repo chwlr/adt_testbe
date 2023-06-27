@@ -11,6 +11,7 @@ use App\Repository\CategoryRepository;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use function PHPUnit\Framework\isEmpty;
 
 class CategoryRepositoryImpl implements CategoryRepository
 {
@@ -24,10 +25,10 @@ class CategoryRepositoryImpl implements CategoryRepository
     public function getCategory($category): CategoryResource
     {
         try {
-            return new CategoryResource($this->category->find($category));
+            return new CategoryResource($this->category->findOrFail($category));
         } catch (Exception $e) {
             throw new GeneralJsonException('Failed to retrieve data', 400);
-        };
+        }
     }
 
     public function getAllCategory(): CategoryCollection
@@ -36,7 +37,7 @@ class CategoryRepositoryImpl implements CategoryRepository
             return new CategoryCollection($this->category->get());
         } catch (Exception $e) {
             throw new GeneralJsonException('Failed to retrieve data', 400);
-        };
+        }
     }
 
     public function storeCategory($attribute): JsonResponse
@@ -50,7 +51,7 @@ class CategoryRepositoryImpl implements CategoryRepository
 
         try {
             DB::beginTransaction();
-            $stored = $this->category->query()->create([
+            $stored = $this->category->create([
                 'name' => data_get($attribute, 'name'),
                 'size' => data_get($attribute, 'size')
             ]);
@@ -62,34 +63,41 @@ class CategoryRepositoryImpl implements CategoryRepository
         }
     }
 
-    public function updateCategory($attribute): CategoryResource
+    public function updateCategory($attribute, $category)
     {
+        $category = $this->category->find($category);
+        if (empty($category)) {
+            throw new GeneralJsonException('Failed to update, data not found', 404);
+        }
+
         try {
             DB::beginTransaction();
-            $categoryUpdated = $this->category->update([
-                'name' => data_get($attribute, 'name'),
-                'size' => data_get($attribute, 'size'),
+            $category->update([
+                'name' => data_get($attribute, 'name') == null ? $category->getOriginal('name') : data_get($attribute, 'name'),
+                'size' => data_get($attribute, 'size') == null ? $category->getOriginal('size') : data_get($attribute, 'size'),
             ]);
             DB::commit();
-            return new CategoryResource($categoryUpdated);
+            return new CategoryResource($category);
         } catch (Exception $e) {
             DB::rollBack();
             throw new GeneralJsonException('Failed to update data', 400);
         }
     }
 
-    public function deleteCategory($category): JsonResponse
+    public function deleteCategory($category)
     {
-        $exist = Product::where('id_category', $category)->get();
-        if (!($exist->isEmpty()))
-        {
-            throw new GeneralJsonException('Failed to store, data with name and size already exist', 400);
+        $selectedCategory = $this->category->find($category);
+        $categoryUsed = Product::where('id_category', '=', $category)->get();
+
+        if (empty($selectedCategory)) {
+            throw new GeneralJsonException('Failed to delete, data not found', 404);
+        } elseif (!($categoryUsed->isEmpty())) {
+            throw new GeneralJsonException('Failed to delete, data currently in used', 400);
         }
 
         try {
             DB::beginTransaction();
-            $user = $this->category->findOrFail($category);
-            $user->delete();
+            $selectedCategory->delete();
             DB::commit();
             return response()->json("Data deleted");
         } catch (Exception $e){
