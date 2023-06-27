@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('category', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('name', 15)->change();
-            $table->enum('size', ['small', 'medium', 'large']);
+        Schema::create('cart', function (Blueprint $table) {
+            $table->uuid('id');
+            $table->uuid('id_user')->nullable(false);
+            $table->foreign('id_user')->references('id')->on('user')->onDelete('cascade');
+            $table->enum('status', ['cart', 'checkout', 'payment', 'complete']);
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('category');
+        Schema::dropIfExists('cart');
     }
 };

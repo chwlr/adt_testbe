@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('category', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('name', 15)->change();
-            $table->enum('size', ['small', 'medium', 'large']);
+        Schema::create('cart_item', function (Blueprint $table) {
+            $table->uuid('id');
+            $table->uuid('id_product')->nullable(false);
+            $table->foreign('id_product')->references('id')->on('product')->onDelete('cascade');
+            $table->decimal('price', 10,2);
+            $table->smallInteger('quantity');
             $table->timestamps();
         });
     }
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('category');
+        Schema::dropIfExists('cart_item');
     }
 };

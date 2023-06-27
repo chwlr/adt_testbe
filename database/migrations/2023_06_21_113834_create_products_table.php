@@ -15,12 +15,12 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('id_category')->nullable(false);
             $table->foreign('id_category')->references('id')->on('category')->onDelete('cascade');
-            $table->string('name');
-            $table->string('description');
-            $table->integer('quantity');
-            $table->integer('weight');
+            $table->string('name', 50)->change();
+            $table->string('description', 100)->change();
+            $table->smallInteger('quantity');
+            $table->smallInteger('weight');
             $table->decimal('price', 10, 2);
-            $table->string('brand');
+            $table->string('brand', 15)->change();
             $table->timestamps();
         });
     }

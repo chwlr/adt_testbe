@@ -1,0 +1,33 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('payment', function (Blueprint $table) {
+            $table->uuid('id');
+            $table->uuid('id_user')->nullable(false);
+            $table->foreign('id_user')->references('user')->on('user')->onDelete('cascade');
+            $table->uuid('id_order')->nullable(false);
+            $table->foreign('id_order')->references('order')->on('order')->onDelete('cascade');
+            $table->string('method', 15)->change();
+            $table->enum('status', ['declined', 'success']);
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('payment');
+    }
+};
