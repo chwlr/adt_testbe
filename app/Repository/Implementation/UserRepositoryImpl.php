@@ -29,7 +29,7 @@ class UserRepositoryImpl implements UserRepository
     {
         try {
             DB::beginTransaction();
-            $stored = $this->user->query()->create([
+            $stored = $this->user->create([
                 'name' => data_get($attribute, 'name'),
                 'email' => data_get($attribute, 'email'),
                 'password' => Hash::make(data_get($attribute, 'password'))

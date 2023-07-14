@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('cart_item', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->primary();
             $table->uuid('id_product')->nullable(false);
             $table->foreign('id_product')->references('id')->on('product')->onDelete('cascade');
             $table->decimal('price', 10,2);

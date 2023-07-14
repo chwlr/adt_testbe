@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('category', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->uuid('id')->primary();
-            $table->string('name', 15)->change();
+            $table->string('name', 15);
             $table->enum('size', ['small', 'medium', 'large']);
             $table->timestamps();
         });

@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('order_item', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->primary();
             $table->uuid('id_product')->nullable(false);
-            $table->foreign('id_product')->references('product')->on('product')->onDelete('cascade');
+            $table->foreign('id_product')->references('id')->on('product')->onDelete('cascade');
             $table->uuid('id_order')->nullable(false);
             $table->foreign('id_order')->references('id')->on('order')->onDelete('cascade');
             $table->decimal('price', 10,2);
@@ -28,6 +28,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('order_item');
+        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
+        Schema::drop('order_item');
+        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 };

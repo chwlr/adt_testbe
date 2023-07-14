@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
@@ -29,6 +30,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::apiResource('category', CategoryController::class);
     Route::apiResource('products', ProductController::class);
+    Route::apiResource('cart', CartController::class);
 
     Route::prefix('stripe')
         ->controller(PaymentController::class)

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('order', function (Blueprint $table) {
-            $table->uuid();
+            $table->uuid('id')->primary();
             $table->uuid('id_product')->nullable(false);
             $table->foreign('id_product')->references('id')->on('product')->onDelete('cascade');
             $table->enum('status', ['paid', 'failed', 'shipped', 'delivered', 'returned', 'complete']);
